@@ -2,8 +2,9 @@
 
 import { HomePage } from '../support/pages/homePage'
 import { ShoppingCart } from '../support/pages/shoppingCart'
-import { Recipt } from '../support/pages/recipt'
 import { Checkout } from '../support/pages/checkout'
+import { Recipt } from '../support/pages/recipt'
+
 
 describe("Entrega final AR", () => {
 
@@ -74,10 +75,10 @@ describe("Entrega final AR", () => {
 
             shoppingCart.clickGoShoppingCart().click();
 
-            recipt.nombreProducto(blackJacket).should('exist');
-            recipt.nombreProducto(remeraNegra).should('exist');
-            recipt.precioProducto(precioBlackJacket).should('exist');
-            recipt.precioProducto(precioRemeraNegra).should('exist');
+            recipt.nombreProducto(blackJacket).should('have.text', blackJacket);
+            recipt.nombreProducto(remeraNegra).should('have.text', remeraNegra);
+            recipt.precioProducto(precioBlackJacket).should('contain', precioBlackJacket);
+            recipt.precioProducto(precioRemeraNegra).should('contain', precioRemeraNegra);
 
             recipt.precioTotal()
 
