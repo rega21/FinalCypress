@@ -5,7 +5,6 @@ export class ShoppingCart{
     };
 
     comprarProducto(compra){ 
-    
         return cy.xpath(`//p[text()="${compra}"]//following-sibling::button`)       
     };
 
