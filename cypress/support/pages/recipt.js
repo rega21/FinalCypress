@@ -1,17 +1,32 @@
 export class Recipt {
 
-    nombreProducto(nombre) {
-        return cy.xpath(`//*[@name="${nombre}"]`);
-        //return cy.contains(productName)
+    constructor() {
+        this.name = "#name";
+        this.cardNumber = "#creditCard";
+        this.totalPrice = "#totalPrice";
+    }
+
+    ReloadDesaparece() {
+        return cy.get('[role="progressbar"]', { timeout: 15000 })
+    }
+
+    verificarNombre() {
+        return cy.get(this.name);
+    }
+
+
+    verificarProducto(product) {
+        return cy.xpath(`//div//p[text()="${product}"]`);
     };
 
-    precioProducto(precio) {
-        return cy.xpath(`//*[@name="${precio}"]`);
-    };
 
-    precioTotal() {
-        cy.xpath("//button[starts-with(text(), 'Show total')]").click()
-    };
+    verificarTarjeta() {
+        return cy.get(this.cardNumber);
+    }
 
+
+    verificarTotal() {
+        return cy.get(this.totalPrice)
+    };
 
 };

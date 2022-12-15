@@ -1,23 +1,30 @@
 export class ShoppingCart{
     constructor() {
-        this.cerrarMensajeAlert = '#closeModal';
-        this.goShoppingCart = '#goShoppingCart';
+        this.precioTotal = "#price"
     };
 
-    comprarProducto(compra){ 
-        return cy.xpath(`//p[text()="${compra}"]//following-sibling::button`)       
+    nombreProducto(nombreProducto){ 
+         return cy.xpath(`//*[@name="${nombreProducto}"]`);      
     };
 
-    clickCerraMensajeAlert(){
-        return cy.get(this.cerrarMensajeAlert)
+    precioProducto(precio) {
+        return cy.xpath(`//*[@name="${precio}"]`);
     };
 
-    clickGoShoppingCart(){
-        return cy.get(this.goShoppingCart)
+
+    clickButtonTotal() {
+        cy.xpath('//button[text()="Show total price"]').click();
     };
 
+
+    obtenerTotal(){
+        return cy.get(this.precioTotal)
+    }
 
 };
+
+
+
 
 
 
