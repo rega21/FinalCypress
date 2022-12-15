@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import { HomePage } from '../support/pages/homePage'
+import { ProductsPage } from '../support/pages/productsPage'
 import { ShoppingCart } from '../support/pages/shoppingCart'
 import { Checkout } from '../support/pages/checkout'
 import { Recipt } from '../support/pages/recipt'
@@ -11,6 +12,7 @@ describe("Entrega final AR", () => {
     let products, validCheckout
 
     const homePage = new HomePage()
+    const productsPage = new ProductsPage()
     const shoppingCart = new ShoppingCart()
     const recipt = new Recipt()
     const checkout = new Checkout()
@@ -36,6 +38,7 @@ describe("Entrega final AR", () => {
         const remeraNegra = products.Producto2.name
         const precioBlackJacket = products.Producto1.price
         const precioRemeraNegra = products.Producto2.price
+        const total = precioBlackJacket + precioRemeraNegra
 
 
         cy.request({
@@ -67,27 +70,38 @@ describe("Entrega final AR", () => {
 
             cy.wait(3000)
 
-            shoppingCart.comprarProducto(blackJacket).click();
-            shoppingCart.clickCerraMensajeAlert().click()
+            productsPage.comprarProducto(blackJacket).click();
+            productsPage.CerraAlert()
 
-            shoppingCart.comprarProducto(remeraNegra).click();
-            shoppingCart.clickCerraMensajeAlert().click()
+            productsPage.comprarProducto(remeraNegra).click();
+            productsPage.CerraAlert()
 
-            shoppingCart.clickGoShoppingCart().click();
+            productsPage.GoShoppingCart().click()
 
-            recipt.nombreProducto(blackJacket).should('have.text', blackJacket);
-            recipt.nombreProducto(remeraNegra).should('have.text', remeraNegra);
-            recipt.precioProducto(precioBlackJacket).should('contain', precioBlackJacket);
-            recipt.precioProducto(precioRemeraNegra).should('contain', precioRemeraNegra);
+            shoppingCart.nombreProducto(blackJacket).should('have.text', blackJacket);
+            shoppingCart.nombreProducto(remeraNegra).should('have.text', remeraNegra);
+            shoppingCart.precioProducto(precioBlackJacket).should('contain', precioBlackJacket);
+            shoppingCart.precioProducto(precioRemeraNegra).should('contain', precioRemeraNegra);
 
-            recipt.precioTotal()
+            shoppingCart.clickButtonTotal();
+            shoppingCart.obtenerTotal().should('have.text',total)
 
             checkout.clickButtonCheckout()
             checkout.nombre(validCheckout.primerCheckout.firstName)
             checkout.apellido(validCheckout.primerCheckout.lastname)
             checkout.tarjeta(validCheckout.primerCheckout.creditCard)
-
             checkout.clickButtonPurchase()
+
+            
+            recipt.ReloadDesaparece().should('not.exist')
+            recipt.verificarNombre().should('contain', `${validCheckout.primerCheckout.firstName}`)
+            recipt.verificarNombre().should('contain', `${validCheckout.primerCheckout.lastname}`)
+            recipt.verificarProducto(blackJacket).should('exist')
+            recipt.verificarProducto(remeraNegra).should('exist')
+            recipt.verificarTarjeta().should('have.text', validCheckout.primerCheckout.creditCard)
+            recipt.verificarTotal().should('contain', total)
+   
+
         })
 
     }); //IT
